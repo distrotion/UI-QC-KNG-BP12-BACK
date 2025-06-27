@@ -203,7 +203,7 @@ router.post('/GETINtoGASHMVKNG001', async (req, res) => {
           "PART_s": dbsap['PART'] || '',
           "PARTNAME_s": dbsap['PARTNAME'] || '',
           "PARTNAME": findcp[0]['PARTNAME'] || '',
-          "MATERIAL": findcp[0]['MATERIAL'] || '',
+          "MATERIAL": dbsap['MATERIAL'] || '',
           "MATERIAL_s": dbsap['MATERIAL'] || '',
           //---new
           "QUANTITY": dbsap['QUANTITY'] || '',
