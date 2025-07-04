@@ -938,10 +938,29 @@ router.post('/KNGMCS001-FINISH-IMG', async (req, res) => {
       "PIC2": input["IMG02"],
       "PIC3": input["IMG03"],
       "PIC4": input["IMG04"],
+      "PIC5": input["IMG05"],
+      "PIC6": input["IMG06"],
+      "PIC7": input["IMG07"],
+      "PIC8": input["IMG08"],
+      "PIC9": input["IMG09"],
+      "PIC10": input["IMG10"],
+      "PIC11": input["IMG11"],
+      "PIC12": input["IMG12"],
+
+
       "PIC1data": input["IMG01data"] || 0,
       "PIC2data": input["IMG02data"] || 0,
       "PIC3data": input["IMG03data"] || 0,
       "PIC4data": input["IMG04data"] || 0,
+      "PIC5data": input["IMG05data"] || 0,
+      "PIC6data": input["IMG06data"] || 0,
+      "PIC7data": input["IMG07data"] || 0,
+      "PIC8data": input["IMG08data"] || 0,
+      "PIC9data": input["IMG09data"] || 0,
+      "PIC10data": input["IMG10data"] || 0,
+      "PIC11data": input["IMG11data"] || 0,
+      "PIC12data": input["IMG12data"] || 0,
+
     });
 
 

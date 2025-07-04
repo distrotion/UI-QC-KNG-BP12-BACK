@@ -463,4 +463,19 @@ router.post('/GETfg', async (req, res) => {
   res.json(INSLISTans);
 });
 
+router.post('/GETDAS01BUFFER', async (req, res) => {
+  //-------------------------------------
+  console.log('--GETDAS01BUFFER--');
+  console.log(req.body);
+  let input = req.body;
+  //-------------------------------------
+
+  let feedback = await mongodb.find("BUFFERCAL", "DAS01", { "DAS01": "BUFFER" });
+
+  console.log(feedback);
+
+  //-------------------------------------
+  return res.json(feedback);
+});
+
 module.exports = router;
