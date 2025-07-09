@@ -13,7 +13,7 @@ let day = d;
 
 //----------------- SETUP
 
-let NAME_INS = 'SPLINESIZE-001'
+let NAME_INS = 'SPLINEGAUGE'
 
 //----------------- DATABASE
 
@@ -33,7 +33,7 @@ let UNIT = 'UNIT';
 
 let finddbbuffer = [{}];
 
-let SPLINESIZE001db = {
+let SPLINEGAUGEdb = {
   "INS": NAME_INS,
   "PO": "",
   "CP": "",
@@ -84,28 +84,28 @@ let SPLINESIZE001db = {
   "INTERSEC_ERR": 0,
   //
   "PIC": "",
-   //----------------------
+  //----------------------
   "USER": "",
   "USERID": "",
 }
 
 
 
-router.get('/CHECK-SPLINESIZE001', async (req, res) => {
+router.get('/CHECK-SPLINEGAUGE', async (req, res) => {
 
-  return res.json(SPLINESIZE001db['PO']);
+  return res.json(SPLINEGAUGEdb['PO']);
 });
 
 
-router.post('/SPLINESIZE001db', async (req, res) => {
+router.post('/SPLINEGAUGEdb', async (req, res) => {
   //-------------------------------------
-  // console.log('--SPLINESIZE001db--');
+  // console.log('--SPLINEGAUGEdb--');
   // console.log(req.body);
   //-------------------------------------
   let finddb = [{}];
   try {
 
-    finddb = SPLINESIZE001db;
+    finddb = SPLINEGAUGEdb;
     finddbbuffer = finddb;
   }
   catch (err) {
@@ -115,14 +115,14 @@ router.post('/SPLINESIZE001db', async (req, res) => {
   return res.json(finddb);
 });
 
-router.post('/GETINtoSPLINESIZE001', async (req, res) => {
+router.post('/GETINtoSPLINEGAUGE', async (req, res) => {
   //-------------------------------------
-  console.log('--GETINtoSPLINESIZE001--');
+  console.log('--GETINtoSPLINEGAUGE--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
   let output = 'NOK';
-  check = SPLINESIZE001db;
+  check = SPLINEGAUGEdb;
   if (input['PO'] !== undefined && input['CP'] !== undefined && check['PO'] === '') {
     // let dbsap = await mssql.qurey(`select * FROM [SAPData_HES_ISN].[dbo].[tblSAPDetail] where [PO] = ${input['PO']}`);
 
@@ -136,7 +136,7 @@ router.post('/GETINtoSPLINESIZE001', async (req, res) => {
         if (findPO[0][`DATA`][i][`PO`] === input['PO']) {
           dbsap = findPO[0][`DATA`][i];
           // break;
-          cuslot = cuslot+ findPO[0][`DATA`][i][`CUSLOTNO`]+ ','
+          cuslot = cuslot + findPO[0][`DATA`][i][`CUSLOTNO`] + ','
         }
       }
 
@@ -162,9 +162,15 @@ router.post('/GETINtoSPLINESIZE001', async (req, res) => {
 
         let ItemPickoutP2 = []
         let ItemPickcodeoutP2 = [];
+
+
         for (i = 0; i < ItemPickcodeout.length; i++) {
+          
+
           for (j = 0; j < MACHINEmaster.length; j++) {
+            //  console.log(ItemPickcodeout[i]['METHOD']);
             if (ItemPickcodeout[i]['METHOD'] === MACHINEmaster[j]['masterID']) {
+      
               if (MACHINEmaster[j]['MACHINE'].includes(NAME_INS)) {
                 ItemPickoutP2.push(ItemPickout[i]);
                 ItemPickcodeoutP2.push(ItemPickcodeout[i]);
@@ -174,16 +180,16 @@ router.post('/GETINtoSPLINESIZE001', async (req, res) => {
         }
         var picS = "";
         // console.log(findcp[0]['Pimg'])
-        if(findcp.length >0){
-          if(findcp[0]['Pimg'] !== undefined ){
+        if (findcp.length > 0) {
+          if (findcp[0]['Pimg'] !== undefined) {
             picS = `${findcp[0]['Pimg'][`P1`]}`
           }
-          
+
         }
 
 
 
-        SPLINESIZE001db = {
+        SPLINEGAUGEdb = {
           "INS": NAME_INS,
           "PO": input['PO'] || '',
           "CP": input['CP'] || '',
@@ -205,7 +211,7 @@ router.post('/GETINtoSPLINESIZE001', async (req, res) => {
           "QUANTITY": dbsap['QUANTITY'] || '',
           // "PROCESS":dbsap ['PROCESS'] || '',
           // "CUSLOTNO": dbsap['CUSLOTNO'] || '',
-          "CUSLOTNO":  cuslot,
+          "CUSLOTNO": cuslot,
           "FG_CHARG": dbsap['FG_CHARG'] || '',
           "PARTNAME_PO": dbsap['PARTNAME_PO'] || '',
           "PART_PO": dbsap['PART_PO'] || '',
@@ -264,18 +270,18 @@ router.post('/GETINtoSPLINESIZE001', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-geteachITEM', async (req, res) => {
+router.post('/SPLINEGAUGE-geteachITEM', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001-geteachITEM--');
+  console.log('--SPLINEGAUGE-geteachITEM--');
   console.log(req.body);
   let inputB = req.body;
 
   let ITEMSS = '';
   let output = 'NOK';
 
-  for (i = 0; i < SPLINESIZE001db['ItemPickcode'].length; i++) {
-    if (SPLINESIZE001db['ItemPickcode'][i]['value'] === inputB['ITEMs']) {
-      ITEMSS = SPLINESIZE001db['ItemPickcode'][i]['key'];
+  for (i = 0; i < SPLINEGAUGEdb['ItemPickcode'].length; i++) {
+    if (SPLINEGAUGEdb['ItemPickcode'][i]['value'] === inputB['ITEMs']) {
+      ITEMSS = SPLINEGAUGEdb['ItemPickcode'][i]['key'];
     }
   }
 
@@ -283,14 +289,14 @@ router.post('/SPLINESIZE001-geteachITEM', async (req, res) => {
   if (ITEMSS !== '') {
 
     //-------------------------------------
-    SPLINESIZE001db['inspectionItem'] = ITEMSS;
-    SPLINESIZE001db['inspectionItemNAME'] = inputB['ITEMs'];
-    let input = { 'PO': SPLINESIZE001db["PO"], 'CP': SPLINESIZE001db["CP"], 'ITEMs': SPLINESIZE001db['inspectionItem'] };
+    SPLINEGAUGEdb['inspectionItem'] = ITEMSS;
+    SPLINEGAUGEdb['inspectionItemNAME'] = inputB['ITEMs'];
+    let input = { 'PO': SPLINEGAUGEdb["PO"], 'CP': SPLINEGAUGEdb["CP"], 'ITEMs': SPLINEGAUGEdb['inspectionItem'] };
     //-------------------------------------
     if (input['PO'] !== undefined && input['CP'] !== undefined && input['ITEMs'] !== undefined) {
       let findcp = await mongodb.find(PATTERN, PATTERN_01, { "CP": input['CP'] });
       let UNITdata = await mongodb.find(master_FN, UNIT, {});
-      let masterITEMs = await mongodb.find(master_FN, ITEMs, { "masterID": SPLINESIZE001db['inspectionItem'] });
+      let masterITEMs = await mongodb.find(master_FN, ITEMs, { "masterID": SPLINEGAUGEdb['inspectionItem'] });
 
       for (i = 0; i < findcp[0]['FINAL'].length; i++) {
         if (findcp[0]['FINAL'][i]['ITEMs'] === input['ITEMs']) {
@@ -319,36 +325,36 @@ router.post('/SPLINESIZE001-geteachITEM', async (req, res) => {
 
           if (masterITEMs.length > 0) {
             //
-            SPLINESIZE001db["RESULTFORMAT"] = masterITEMs[0]['RESULTFORMAT']
-            SPLINESIZE001db["GRAPHTYPE"] = masterITEMs[0]['GRAPHTYPE']
+            SPLINEGAUGEdb["RESULTFORMAT"] = masterITEMs[0]['RESULTFORMAT']
+            SPLINEGAUGEdb["GRAPHTYPE"] = masterITEMs[0]['GRAPHTYPE']
             //------------------------------------
 
             let graph = await mongodb.find(PATTERN, GRAPH_TABLE, {});
-            SPLINESIZE001db['GAPnameList'] = [];
+            SPLINEGAUGEdb['GAPnameList'] = [];
             for (k = 0; k < graph.length; k++) {
-              SPLINESIZE001db['GAPnameList'].push(graph[k]['NO']);
+              SPLINEGAUGEdb['GAPnameList'].push(graph[k]['NO']);
             }
           }
 
           for (j = 0; j < UNITdata.length; j++) {
             if (findcp[0]['FINAL'][i]['UNIT'] == UNITdata[j]['masterID']) {
-              SPLINESIZE001db["UNIT"] = UNITdata[j]['UNIT'];
+              SPLINEGAUGEdb["UNIT"] = UNITdata[j]['UNIT'];
             }
           }
 
           console.log(findcp[0]['FINAL'][i]['POINT']);
 
-          SPLINESIZE001db["POINTs"] = findcp[0]['FINAL'][i]['POINT'];
-          SPLINESIZE001db["PCS"] = findcp[0]['FINAL'][i]['PCS'];
-          SPLINESIZE001db["PCSleft"] = findcp[0]['FINAL'][i]['PCS'];
+          SPLINEGAUGEdb["POINTs"] = findcp[0]['FINAL'][i]['POINT'];
+          SPLINEGAUGEdb["PCS"] = findcp[0]['FINAL'][i]['PCS'];
+          SPLINEGAUGEdb["PCSleft"] = findcp[0]['FINAL'][i]['PCS'];
 
-          SPLINESIZE001db["INTERSEC"] = masterITEMs[0]['INTERSECTION'];
+          SPLINEGAUGEdb["INTERSEC"] = masterITEMs[0]['INTERSECTION'];
           output = 'OK';
           let findpo = await mongodb.find(MAIN_DATA, MAIN, { "PO": input['PO'] });
           if (findpo.length > 0) {
             request.post(
-              'http://127.0.0.1:17180/SPLINESIZE001-feedback',
-              { json: { "PO": SPLINESIZE001db['PO'], "ITEMs": SPLINESIZE001db['inspectionItem'] } },
+              'http://127.0.0.1:17180/SPLINEGAUGE-feedback',
+              { json: { "PO": SPLINEGAUGEdb['PO'], "ITEMs": SPLINEGAUGEdb['inspectionItem'] } },
               function (error, response, body2) {
                 if (!error && response.statusCode == 200) {
                   // console.log(body2);
@@ -365,11 +371,11 @@ router.post('/SPLINESIZE001-geteachITEM', async (req, res) => {
     }
 
   } else {
-    SPLINESIZE001db["POINTs"] = '',
-      SPLINESIZE001db["PCS"] = '',
-      SPLINESIZE001db["PCSleft"] = '',
-      SPLINESIZE001db["UNIT"] = "",
-      SPLINESIZE001db["INTERSEC"] = "",
+    SPLINEGAUGEdb["POINTs"] = '',
+      SPLINEGAUGEdb["PCS"] = '',
+      SPLINEGAUGEdb["PCSleft"] = '',
+      SPLINEGAUGEdb["UNIT"] = "",
+      SPLINEGAUGEdb["INTERSEC"] = "",
       output = 'NOK';
   }
 
@@ -377,17 +383,17 @@ router.post('/SPLINESIZE001-geteachITEM', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-geteachGRAPH', async (req, res) => {
+router.post('/SPLINEGAUGE-geteachGRAPH', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001-geteachGRAPH--');
+  console.log('--SPLINEGAUGE-geteachGRAPH--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
   try {
     let graph = await mongodb.find(PATTERN, GRAPH_TABLE, { "NO": input['GAPname'] });
     console.log(graph);
-    SPLINESIZE001db['GAPnameListdata'] = graph[0];//confirmdata
-    SPLINESIZE001db['GAP'] = SPLINESIZE001db['GAPnameListdata'][`GT${SPLINESIZE001db['confirmdata'].length + 1}`]
+    SPLINEGAUGEdb['GAPnameListdata'] = graph[0];//confirmdata
+    SPLINEGAUGEdb['GAP'] = SPLINEGAUGEdb['GAPnameListdata'][`GT${SPLINEGAUGEdb['confirmdata'].length + 1}`]
   } catch (err) {
 
   }
@@ -395,9 +401,9 @@ router.post('/SPLINESIZE001-geteachGRAPH', async (req, res) => {
   return res.json('ok');
 });
 
-router.post('/SPLINESIZE001-preview', async (req, res) => {
+router.post('/SPLINEGAUGE-preview', async (req, res) => {
   //-------------------------------------
-  // console.log('--SPLINESIZE001-preview--');
+  // console.log('--SPLINEGAUGE-preview--');
   // console.log(req.body);
   let input = req.body;
   //-------------------------------------
@@ -406,7 +412,7 @@ router.post('/SPLINESIZE001-preview', async (req, res) => {
     if (input[0]['V1'] !== undefined) {
       //-------------------------------------
       try {
-        SPLINESIZE001db['preview'] = input;
+        SPLINEGAUGEdb['preview'] = input;
         output = 'OK';
       }
       catch (err) {
@@ -417,44 +423,44 @@ router.post('/SPLINESIZE001-preview', async (req, res) => {
       output = 'NOK';
     }
   } else {
-    SPLINESIZE001db['preview'] = [];
+    SPLINEGAUGEdb['preview'] = [];
     output = 'clear';
   }
   //-------------------------------------
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-confirmdata', async (req, res) => {
+router.post('/SPLINEGAUGE-confirmdata', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001-confirmdata--');
+  console.log('--SPLINEGAUGE-confirmdata--');
   console.log(req.body);
   // let input = req.body;
   //-------------------------------------
   let output = 'NOK';
   //-------------------------------------
   try {
-    let datapush = SPLINESIZE001db['preview'][0]
+    let datapush = SPLINEGAUGEdb['preview'][0]
 
-    if (SPLINESIZE001db['RESULTFORMAT'] === 'Graph') {
-      let pushdata = SPLINESIZE001db['preview'][0]
+    if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Graph') {
+      let pushdata = SPLINEGAUGEdb['preview'][0]
 
-      pushdata['V5'] = SPLINESIZE001db['GAP'];
-      pushdata['V1'] = `${SPLINESIZE001db['confirmdata'].length + 1}:${pushdata['V1']}`;
+      pushdata['V5'] = SPLINEGAUGEdb['GAP'];
+      pushdata['V1'] = `${SPLINEGAUGEdb['confirmdata'].length + 1}:${pushdata['V1']}`;
 
-      SPLINESIZE001db['confirmdata'].push(pushdata);
-      SPLINESIZE001db['preview'] = [];
+      SPLINEGAUGEdb['confirmdata'].push(pushdata);
+      SPLINEGAUGEdb['preview'] = [];
       output = 'OK';
-      SPLINESIZE001db['GAP'] = SPLINESIZE001db['GAPnameListdata'][`GT${SPLINESIZE001db['confirmdata'].length + 1}`]
+      SPLINEGAUGEdb['GAP'] = SPLINEGAUGEdb['GAPnameListdata'][`GT${SPLINEGAUGEdb['confirmdata'].length + 1}`]
 
-    } else if (SPLINESIZE001db['RESULTFORMAT'] === 'Number') {
+    } else if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Number') {
 
-      let pushdata = SPLINESIZE001db['preview'][0]
+      let pushdata = SPLINEGAUGEdb['preview'][0]
 
-      pushdata['V5'] = SPLINESIZE001db['confirmdata'].length + 1
-      pushdata['V1'] = `${SPLINESIZE001db['confirmdata'].length + 1}:${pushdata['V1']}`
+      pushdata['V5'] = SPLINEGAUGEdb['confirmdata'].length + 1
+      pushdata['V1'] = `${SPLINEGAUGEdb['confirmdata'].length + 1}:${pushdata['V1']}`
 
-      SPLINESIZE001db['confirmdata'].push(pushdata);
-      SPLINESIZE001db['preview'] = [];
+      SPLINEGAUGEdb['confirmdata'].push(pushdata);
+      SPLINEGAUGEdb['preview'] = [];
       output = 'OK';
     }
   }
@@ -467,9 +473,9 @@ router.post('/SPLINESIZE001-confirmdata', async (req, res) => {
 
 
 
-router.post('/SPLINESIZE001-feedback', async (req, res) => {
+router.post('/SPLINEGAUGE-feedback', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001-feedback--');
+  console.log('--SPLINEGAUGE-feedback--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
@@ -490,8 +496,8 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
       for (i = 0; i < oblist.length; i++) {
         LISTbuffer.push(...ob[oblist[i]])
       }
-      SPLINESIZE001db["PCSleft"] = `${parseInt(SPLINESIZE001db["PCS"]) - oblist.length}`;
-      if (SPLINESIZE001db['RESULTFORMAT'] === 'Number' || SPLINESIZE001db['RESULTFORMAT'] === 'Text' || SPLINESIZE001db['RESULTFORMAT'] === 'Graph') {
+      SPLINEGAUGEdb["PCSleft"] = `${parseInt(SPLINEGAUGEdb["PCS"]) - oblist.length}`;
+      if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Number' || SPLINEGAUGEdb['RESULTFORMAT'] === 'Text' || SPLINEGAUGEdb['RESULTFORMAT'] === 'Graph') {
         for (i = 0; i < LISTbuffer.length; i++) {
           if (LISTbuffer[i]['PO1'] === 'Mean') {
             ITEMleftVALUEout.push({ "V1": 'Mean', "V2": `${LISTbuffer[i]['PO3']}` })
@@ -502,14 +508,14 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
         }
 
 
-        SPLINESIZE001db["ITEMleftUNIT"] = [{ "V1": "FINAL", "V2": `${oblist.length}` }];
-        SPLINESIZE001db["ITEMleftVALUE"] = ITEMleftVALUEout;
+        SPLINEGAUGEdb["ITEMleftUNIT"] = [{ "V1": "FINAL", "V2": `${oblist.length}` }];
+        SPLINEGAUGEdb["ITEMleftVALUE"] = ITEMleftVALUEout;
 
       } else {
 
       }
       // output = 'OK';
-      if ((parseInt(SPLINESIZE001db["PCS"]) - oblist.length) == 0) {
+      if ((parseInt(SPLINEGAUGEdb["PCS"]) - oblist.length) == 0) {
         //CHECKlist
         for (i = 0; i < feedback[0]['CHECKlist'].length; i++) {
           if (input["ITEMs"] === feedback[0]['CHECKlist'][i]['key']) {
@@ -554,7 +560,7 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
 
           } else if (masterITEMs[0]['RESULTFORMAT'] === 'Graph') {
 
-            if (SPLINESIZE001db['GRAPHTYPE'] == 'CDE') {
+            if (SPLINEGAUGEdb['GRAPHTYPE'] == 'CDE') {
 
               //
               let axis_data = [];
@@ -566,8 +572,8 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
               //-----------------core
 
               let core = 0;
-              if (SPLINESIZE001db['INTERSEC'] !== '') {
-                core = parseFloat(SPLINESIZE001db['INTERSEC'])
+              if (SPLINEGAUGEdb['INTERSEC'] !== '') {
+                core = parseFloat(SPLINEGAUGEdb['INTERSEC'])
               } else {
                 core = parseFloat(axis_data[axis_data.length - 1]['y'])
               }
@@ -600,11 +606,11 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
 
               }
               catch (err) {
-                SPLINESIZE001db[`INTERSEC_ERR`] = 1;
+                SPLINEGAUGEdb[`INTERSEC_ERR`] = 1;
               }
 
               //
-            } else if (SPLINESIZE001db['GRAPHTYPE'] == 'CDE') {
+            } else if (SPLINEGAUGEdb['GRAPHTYPE'] == 'CDE') {
               let axis_data = [];
               for (i = 0; i < LISTbuffer.length; i++) {
                 if (LISTbuffer[i]['PO1'] !== 'Mean') {
@@ -691,10 +697,10 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
         if (CHECKlistdataFINISH.length === feedback[0]['CHECKlist'].length) {
           // feedback[0]['FINAL_ANS']["ALL_DONE"] = "DONE";
           // feedback[0]['FINAL_ANS']["PO_judgment"] ="pass";
-          let dataCheck = await axios.post("http://localhost:17180/JUDEMENT",{"PO":SPLINESIZE001db["PO"],"CP":SPLINESIZE001db["CP"]})
+          let dataCheck = await axios.post("http://localhost:17180/JUDEMENT", { "PO": SPLINEGAUGEdb["PO"], "CP": SPLINEGAUGEdb["CP"] })
           let resultdataCheck = 'pass'
-          for(let i = 0;i<dataCheck.length;i++){
-            if(dataCheck[i]['result'] !== 'OK'){
+          for (let i = 0; i < dataCheck.length; i++) {
+            if (dataCheck[i]['result'] !== 'OK') {
               resultdataCheck = 'no pass';
               break;
             }
@@ -704,8 +710,8 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
 
       }
     } else {
-      SPLINESIZE001db["ITEMleftUNIT"] = '';
-      SPLINESIZE001db["ITEMleftVALUE"] = '';
+      SPLINEGAUGEdb["ITEMleftUNIT"] = '';
+      SPLINEGAUGEdb["ITEMleftVALUE"] = '';
     }
 
   }
@@ -714,9 +720,9 @@ router.post('/SPLINESIZE001-feedback', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-SETZERO', async (req, res) => {
+router.post('/SPLINEGAUGE-SETZERO', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001fromINS--');
+  console.log('--SPLINEGAUGEfromINS--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
@@ -724,7 +730,7 @@ router.post('/SPLINESIZE001-SETZERO', async (req, res) => {
   //-------------------------------------
   try {
 
-    SPLINESIZE001db = {
+    SPLINEGAUGEdb = {
       "INS": NAME_INS,
       "PO": "",
       "CP": "",
@@ -776,8 +782,8 @@ router.post('/SPLINESIZE001-SETZERO', async (req, res) => {
       //
       "PIC": "",
       //----------------------
-  "USER": "",
-  "USERID": "",
+      "USER": "",
+      "USERID": "",
     }
     output = 'OK';
   }
@@ -788,9 +794,9 @@ router.post('/SPLINESIZE001-SETZERO', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-CLEAR', async (req, res) => {
+router.post('/SPLINEGAUGE-CLEAR', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001fromINS--');
+  console.log('--SPLINEGAUGEfromINS--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
@@ -798,8 +804,8 @@ router.post('/SPLINESIZE001-CLEAR', async (req, res) => {
   //-------------------------------------
   try {
 
-    SPLINESIZE001db['preview'] = [];
-    SPLINESIZE001db['confirmdata'] = [];
+    SPLINEGAUGEdb['preview'] = [];
+    SPLINEGAUGEdb['confirmdata'] = [];
 
     output = 'OK';
   }
@@ -810,9 +816,9 @@ router.post('/SPLINESIZE001-CLEAR', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/SPLINESIZE001-RESETVALUE', async (req, res) => {
+router.post('/SPLINEGAUGE-RESETVALUE', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001fromINS--');
+  console.log('--SPLINEGAUGEfromINS--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
@@ -820,9 +826,9 @@ router.post('/SPLINESIZE001-RESETVALUE', async (req, res) => {
   //-------------------------------------
   try {
 
-    let all = SPLINESIZE001db['confirmdata'].length
+    let all = SPLINEGAUGEdb['confirmdata'].length
     if (all > 0) {
-      SPLINESIZE001db['confirmdata'].pop();
+      SPLINEGAUGEdb['confirmdata'].pop();
     }
 
     output = 'OK';
@@ -837,25 +843,25 @@ router.post('/SPLINESIZE001-RESETVALUE', async (req, res) => {
 //"value":[],  //key: PO1: itemname ,PO2:V01,PO3: V02,PO4: V03,PO5:V04,P06:INS,P9:NO.,P10:TYPE, last alway mean P01:"MEAN",PO2:V01,PO3:V02-MEAN,PO4: V03,PO5:V04-MEAN
 
 
-router.post('/SPLINESIZE001-FINISH', async (req, res) => {
+router.post('/SPLINEGAUGE-FINISH', async (req, res) => {
   //-------------------------------------
-  console.log('--SPLINESIZE001-FINISH--');
+  console.log('--SPLINEGAUGE-FINISH--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
   let output = 'OK';
 
-  if (SPLINESIZE001db['RESULTFORMAT'] === 'Number' || SPLINESIZE001db['RESULTFORMAT'] === 'Text') {
+  if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Number' || SPLINEGAUGEdb['RESULTFORMAT'] === 'Text') {
 
-    SPLINESIZE001db["value"] = [];
-    console.log(SPLINESIZE001db["value"]);
-    for (i = 0; i < SPLINESIZE001db['confirmdata'].length; i++) {
-      SPLINESIZE001db["value"].push({
-        "PO1": SPLINESIZE001db["inspectionItemNAME"],
-        "PO2": SPLINESIZE001db['confirmdata'][i]['V1'],
-        "PO3": SPLINESIZE001db['confirmdata'][i]['V2'],
-        "PO4": SPLINESIZE001db['confirmdata'][i]['V3'],
-        "PO5": SPLINESIZE001db['confirmdata'][i]['V4'],
+    SPLINEGAUGEdb["value"] = [];
+    console.log(SPLINEGAUGEdb["value"]);
+    for (i = 0; i < SPLINEGAUGEdb['confirmdata'].length; i++) {
+      SPLINEGAUGEdb["value"].push({
+        "PO1": SPLINEGAUGEdb["inspectionItemNAME"],
+        "PO2": SPLINEGAUGEdb['confirmdata'][i]['V1'],
+        "PO3": SPLINEGAUGEdb['confirmdata'][i]['V2'],
+        "PO4": SPLINEGAUGEdb['confirmdata'][i]['V3'],
+        "PO5": SPLINEGAUGEdb['confirmdata'][i]['V4'],
         "PO6": "-",
         "PO7": "-",
         "PO8": '-',
@@ -863,85 +869,85 @@ router.post('/SPLINESIZE001-FINISH', async (req, res) => {
         "PO10": "AUTO",
       });
     }
-    if (SPLINESIZE001db["value"].length > 0) {
+    if (SPLINEGAUGEdb["value"].length > 0) {
       let mean01 = [];
       let mean02 = [];
-      for (i = 0; i < SPLINESIZE001db["value"].length; i++) {
-        mean01.push(parseFloat(SPLINESIZE001db["value"][i]["PO3"]));
-        mean02.push(parseFloat(SPLINESIZE001db["value"][i]["PO5"]));
+      for (i = 0; i < SPLINEGAUGEdb["value"].length; i++) {
+        mean01.push(parseFloat(SPLINEGAUGEdb["value"][i]["PO3"]));
+        mean02.push(parseFloat(SPLINEGAUGEdb["value"][i]["PO5"]));
       }
       let sum1 = mean01.reduce((a, b) => a + b, 0);
       let avg1 = (sum1 / mean01.length) || 0;
       let sum2 = mean02.reduce((a, b) => a + b, 0);
       let avg2 = (sum2 / mean02.length) || 0;
-      SPLINESIZE001db["value"].push({
+      SPLINEGAUGEdb["value"].push({
         "PO1": 'Mean',
-        "PO2": SPLINESIZE001db['confirmdata'][0]['V1'],
+        "PO2": SPLINEGAUGEdb['confirmdata'][0]['V1'],
         "PO3": avg1,
-        "PO4": SPLINESIZE001db['confirmdata'][0]['V3'],
+        "PO4": SPLINEGAUGEdb['confirmdata'][0]['V3'],
         "PO5": avg2,
       });
     }
 
-  } else if (SPLINESIZE001db['RESULTFORMAT'] === 'OCR' || SPLINESIZE001db['RESULTFORMAT'] === 'Picture') {
+  } else if (SPLINEGAUGEdb['RESULTFORMAT'] === 'OCR' || SPLINEGAUGEdb['RESULTFORMAT'] === 'Picture') {
 
-  } else if (SPLINESIZE001db['RESULTFORMAT'] === 'Graph') {
+  } else if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Graph') {
 
-    SPLINESIZE001db["value"] = [];
-    for (i = 0; i < SPLINESIZE001db['confirmdata'].length; i++) {
-      SPLINESIZE001db["value"].push({
-        "PO1": SPLINESIZE001db["inspectionItemNAME"],
-        "PO2": SPLINESIZE001db['confirmdata'][i]['V1'],
-        "PO3": SPLINESIZE001db['confirmdata'][i]['V2'],
-        "PO4": SPLINESIZE001db['confirmdata'][i]['V3'],
-        "PO5": SPLINESIZE001db['confirmdata'][i]['V4'],
+    SPLINEGAUGEdb["value"] = [];
+    for (i = 0; i < SPLINEGAUGEdb['confirmdata'].length; i++) {
+      SPLINEGAUGEdb["value"].push({
+        "PO1": SPLINEGAUGEdb["inspectionItemNAME"],
+        "PO2": SPLINEGAUGEdb['confirmdata'][i]['V1'],
+        "PO3": SPLINEGAUGEdb['confirmdata'][i]['V2'],
+        "PO4": SPLINEGAUGEdb['confirmdata'][i]['V3'],
+        "PO5": SPLINEGAUGEdb['confirmdata'][i]['V4'],
         "PO6": "-",
         "PO7": "-",
-        "PO8": SPLINESIZE001db['confirmdata'][i]['V5'],
+        "PO8": SPLINEGAUGEdb['confirmdata'][i]['V5'],
         "PO9": i + 1,
         "PO10": "AUTO",
       });
     }
-    if (SPLINESIZE001db["value"].length > 0) {
+    if (SPLINEGAUGEdb["value"].length > 0) {
       let mean01 = [];
       let mean02 = [];
-      for (i = 0; i < SPLINESIZE001db["value"].length; i++) {
-        mean01.push(parseFloat(SPLINESIZE001db["value"][i]["PO3"]));
-        mean02.push(parseFloat(SPLINESIZE001db["value"][i]["PO5"]));
+      for (i = 0; i < SPLINEGAUGEdb["value"].length; i++) {
+        mean01.push(parseFloat(SPLINEGAUGEdb["value"][i]["PO3"]));
+        mean02.push(parseFloat(SPLINEGAUGEdb["value"][i]["PO5"]));
       }
       let sum1 = mean01.reduce((a, b) => a + b, 0);
       let avg1 = (sum1 / mean01.length) || 0;
       let sum2 = mean02.reduce((a, b) => a + b, 0);
       let avg2 = (sum2 / mean02.length) || 0;
-      SPLINESIZE001db["value"].push({
+      SPLINEGAUGEdb["value"].push({
         "PO1": 'Mean',
-        "PO2": SPLINESIZE001db['confirmdata'][0]['V1'],
+        "PO2": SPLINEGAUGEdb['confirmdata'][0]['V1'],
         "PO3": avg1,
-        "PO4": SPLINESIZE001db['confirmdata'][0]['V3'],
+        "PO4": SPLINEGAUGEdb['confirmdata'][0]['V3'],
         "PO5": avg2,
       });
     }
 
   }
 
-  if (SPLINESIZE001db['RESULTFORMAT'] === 'Number' ||
-    SPLINESIZE001db['RESULTFORMAT'] === 'Text' ||
-    SPLINESIZE001db['RESULTFORMAT'] === 'OCR' ||
-    SPLINESIZE001db['RESULTFORMAT'] === 'Picture' || SPLINESIZE001db['RESULTFORMAT'] === 'Graph') {
+  if (SPLINEGAUGEdb['RESULTFORMAT'] === 'Number' ||
+    SPLINEGAUGEdb['RESULTFORMAT'] === 'Text' ||
+    SPLINEGAUGEdb['RESULTFORMAT'] === 'OCR' ||
+    SPLINEGAUGEdb['RESULTFORMAT'] === 'Picture' || SPLINEGAUGEdb['RESULTFORMAT'] === 'Graph') {
     request.post(
       'http://127.0.0.1:17180/FINISHtoDB',
-      { json: SPLINESIZE001db },
+      { json: SPLINEGAUGEdb },
       function (error, response, body) {
         if (!error && response.statusCode == 200) {
           // console.log(body);
           // if (body === 'OK') {
-          SPLINESIZE001db['confirmdata'] = [];
-          SPLINESIZE001db["value"] = [];
+          SPLINEGAUGEdb['confirmdata'] = [];
+          SPLINEGAUGEdb["value"] = [];
           //------------------------------------------------------------------------------------
 
           request.post(
-            'http://127.0.0.1:17180/SPLINESIZE001-feedback',
-            { json: { "PO": SPLINESIZE001db['PO'], "ITEMs": SPLINESIZE001db['inspectionItem'] } },
+            'http://127.0.0.1:17180/SPLINEGAUGE-feedback',
+            { json: { "PO": SPLINEGAUGEdb['PO'], "ITEMs": SPLINEGAUGEdb['inspectionItem'] } },
             function (error, response, body2) {
               if (!error && response.statusCode == 200) {
                 // console.log(body2);
@@ -960,7 +966,7 @@ router.post('/SPLINESIZE001-FINISH', async (req, res) => {
     );
   }
   //-------------------------------------
-  return res.json(SPLINESIZE001db);
+  return res.json(SPLINEGAUGEdb);
 });
 
 
