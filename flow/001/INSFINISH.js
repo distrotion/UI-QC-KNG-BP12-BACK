@@ -816,16 +816,17 @@ router.post('/GRAPH-recal', async (req, res) => {
   return res.json(output);
 });
 
-router.post('/GETHMVATPOINT', async (req, res) => {
+router.post('/GETMAXMINPOINT', async (req, res) => {
   //-------------------------------------
-  console.log('--GETHMVATPOINT--');
+  console.log('--GETMAXMINPOINT--');
   console.log(req.body);
   let input = req.body;
   //-------------------------------------
   let output = "NOK";
   //-------------------------------------
 
-  if (input[`PO`] !== undefined && input[`NAME_INS`] !== undefined && input[`POINT`] !== undefined) {
+  //&& input[`POINT`] !== undefined
+  if (input[`PO`] !== undefined && input[`NAME_INS`] !== undefined ) {
 
 
 
@@ -843,8 +844,16 @@ router.post('/GETHMVATPOINT', async (req, res) => {
           if (ob1[ob2[i]['key']] != undefined) {
             // console.log(ob1[ob2[i]['key']]['PSC1'][parseInt(input[`POINT`])]);
 
-            output = `${ob1[ob2[i]['key']]['PSC1'][parseInt(input[`POINT`])]['PO3']}`
-            let dataCheck = await axios.post("http://localhost:17180/Refgraph-preview", [{ "V1": "ref1", "V2": output }])
+            let setdata = ob1[ob2[i]['key']]
+            if(setdata[`PSC1`]!=undefined){
+              //
+              for (let k = 0; k < setdata[`PSC1`].length-1; k++) {
+                console.log(parseFloat(setdata[`PSC1`][k][`PO3`]));
+                
+              }
+            }
+            // console.log(output);
+            // let dataCheck = await axios.post("http://localhost:17180/MAXMIN-preview", [{ "V1": "ref1", "V2": output }])
           }
 
         }
