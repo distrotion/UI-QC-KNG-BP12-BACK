@@ -654,68 +654,47 @@ router.post('/MAXMIN-confirmdata', async (req, res) => {
   let output = 'NOK';
   //-------------------------------------
   try {
-    // let datapush = MAXMINdb['preview'][0]
+    let datapush = MAXMINdb['preview'][0]
 
-    // if (MAXMINdb['RESULTFORMAT'] === 'Graph') {
-    //   let pushdata = MAXMINdb['preview'][0]
+    if (MAXMINdb['RESULTFORMAT'] === 'Graph') {
+      let pushdata = MAXMINdb['preview'][0]
 
-    //   pushdata['V5'] = MAXMINdb['GAP'];
-    //   pushdata['V1'] = `${MAXMINdb['confirmdata'].length + 1}:${pushdata['V1']}`;
+      pushdata['V5'] = MAXMINdb['GAP'];
+      pushdata['V1'] = `${MAXMINdb['confirmdata'].length + 1}:${pushdata['V1']}`;
 
-    //   MAXMINdb['confirmdata'].push(pushdata);
-    //   MAXMINdb['preview'] = [];
-    //   output = 'OK';
-    //   MAXMINdb['GAP'] = MAXMINdb['GAPnameListdata'][`GT${MAXMINdb['confirmdata'].length + 1}`]
+      MAXMINdb['confirmdata'].push(pushdata);
+      MAXMINdb['preview'] = [];
+      output = 'OK';
+      MAXMINdb['GAP'] = MAXMINdb['GAPnameListdata'][`GT${MAXMINdb['confirmdata'].length + 1}`]
 
-    // } else if (MAXMINdb['RESULTFORMAT'] === 'Number') {
+    } else if (MAXMINdb['RESULTFORMAT'] === 'Number') {
 
-    //   let pushdata = MAXMINdb['preview'][0]
+      let pushdata = MAXMINdb['preview'][0]
 
-    //   pushdata['V5'] = MAXMINdb['confirmdata'].length + 1
-    //   pushdata['V1'] = `${MAXMINdb['confirmdata'].length + 1}:${pushdata['V1']}`
+      pushdata['V5'] = MAXMINdb['confirmdata'].length + 1
+      pushdata['V1'] = `${MAXMINdb['confirmdata'].length + 1}:${pushdata['V1']}`
 
-    //   MAXMINdb['confirmdata'].push(pushdata);
-    //   MAXMINdb['preview'] = [];
-    //   output = 'OK';
-    // }
-    if (MAXMINdb['RESULTFORMAT'] === 'CAL1') {
-
-      if (input['PO'] != undefined && input['CP'] != undefined && input['VAL1'] != undefined && input['VAL2'] != undefined && input['VAL3'] != undefined && input['VAL4'] != undefined && input['FORMULA'] != undefined) {
-
-        let feedbackupdate = await mongodb.update("BUFFERCAL", "DAS01", { "DAS01": "BUFFER" }, {
-          "$set": {
-            'PO': input['PO'],
-            'CP': input['CP'],
-            'VAL1': input['VAL1'],
-            'VAL2': input['VAL2'],
-            'VAL3': input['VAL3'],
-            'VAL4': input['VAL4'],
-            'FORMULA': input['FORMULA'],
-            'Result1': input['Result1'],
-            'Result2': input['Result2'],
-            'Result': input['Result'],
-          }
-        });
-        MAXMINdb['confirmdataCW'][0]['VAL1'] = input['VAL1'];
-        MAXMINdb['confirmdataCW'][0]['VAL2'] = input['VAL2'];
-        MAXMINdb['confirmdataCW'][0]['VAL3'] = input['VAL3'];
-        MAXMINdb['confirmdataCW'][0]['VAL4'] = input['VAL4'];
-        MAXMINdb['confirmdataCW'][0]['Area'] = input['Area'];
-        MAXMINdb['confirmdataCW'][0]['FORMULA'] = input['FORMULA'];
-        MAXMINdb['confirmdataCW'][0]['Result1'] = input['Result1'];
-        MAXMINdb['confirmdataCW'][0]['Result2'] = input['Result2'];
-        MAXMINdb['confirmdataCW'][0]['Result'] = input['Result'];
-      }
-
-
+      MAXMINdb['confirmdata'].push(pushdata);
+      MAXMINdb['preview'] = [];
       output = 'OK';
     }
+ 
   }
   catch (err) {
     output = 'NOK';
   }
   //-------------------------------------
   return res.json(output);
+});
+
+router.post('/MAXMIN-confirmdata-set', async (req, res) => {
+  //-------------------------------------
+  console.log('--MAXMIN-confirmdata-set--');
+  console.log(req.body);
+  let input = req.body;
+  MAXMINdb['confirmdata'] = input;
+  //-------------------------------------
+  res.json('ok');
 });
 
 

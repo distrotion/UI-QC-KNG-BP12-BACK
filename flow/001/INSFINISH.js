@@ -826,7 +826,7 @@ router.post('/GETMAXMINPOINT', async (req, res) => {
   //-------------------------------------
 
   //&& input[`POINT`] !== undefined
-  if (input[`PO`] !== undefined && input[`NAME_INS`] !== undefined ) {
+  if (input[`PO`] !== undefined && input[`NAME_INS`] !== undefined) {
 
 
 
@@ -845,13 +845,78 @@ router.post('/GETMAXMINPOINT', async (req, res) => {
             // console.log(ob1[ob2[i]['key']]['PSC1'][parseInt(input[`POINT`])]);
 
             let setdata = ob1[ob2[i]['key']]
-            if(setdata[`PSC1`]!=undefined){
+
+            if (setdata[`PSC1`] != undefined) {
               //
-              for (let k = 0; k < setdata[`PSC1`].length-1; k++) {
-                console.log(parseFloat(setdata[`PSC1`][k][`PO3`]));
-                
+              let dataset = []
+              // for (let k = 0; k < setdata[`PSC1`].length - 1; k++) {
+              // console.log(parseFloat(setdata[`PSC1`][k][`PO3`]));
+              if (parseFloat(setdata[`PSC1`][0][`PIC1data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC1data`]));
               }
+              if (parseFloat(setdata[`PSC1`][0][`PIC2data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC2data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC3data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC3data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC4data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC4data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC5data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC5data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC6data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC6data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC7data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC7data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC8data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC8data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC9data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC9data`]));
+              }
+              if (parseFloat(setdata[`PSC1`][0][`PIC10data`] || '0') !== 0) {
+                dataset.push(parseFloat(setdata[`PSC1`][0][`PIC10data`]));
+              }
+
+
+
+              // }
+
+              let setoutsort = dataset.sort(function (a, b) {
+                return a - b; // Ascending order
+              });
+              console.log(setoutsort);
+              let outdata = { "V1": `${setoutsort[setoutsort.length - 1]}-${setoutsort[0]}`, "V2": (setoutsort[setoutsort.length - 1] - setoutsort[0]).toFixed(2) }
+              console.log(outdata);
+
+              const axios = require('axios');
+              let data = JSON.stringify([
+               outdata
+              ]);
+
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://127.0.0.1:17180/MAXMIN-confirmdata-set',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                data: data
+              };
+
+              axios.request(config)
+                .then((response) => {
+                  console.log(JSON.stringify(response.data));
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             }
+
             // console.log(output);
             // let dataCheck = await axios.post("http://localhost:17180/MAXMIN-preview", [{ "V1": "ref1", "V2": output }])
           }

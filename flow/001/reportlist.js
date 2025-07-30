@@ -294,7 +294,9 @@ router.post('/CopyReport', async (req, res) => {
   let output = "NOK";
   //-------------------------------------
 
-  if (input[`original`] !== undefined && input[`new`] !== undefined) {
+  if (input[`original`] !== undefined && input[`new`] !== undefined&& input[`Group`] !== undefined) {
+    
+    find1 = await mongodb.update(MAIN_DATA, MAIN, { "PO": input[`original`]},{ "Group": input['Group']});
 
     let newdataHEAD = {};
 
@@ -317,6 +319,7 @@ router.post('/CopyReport', async (req, res) => {
 
         let testDB = await mongodb.find(MAIN_DATA, MAIN, { "PO": input[`new`] });
         if (testDB.length === 0) {
+          
           let origianlDB = await mongodb.find(MAIN_DATA, MAIN, { "PO": input[`original`] });
           let NewMATCP = await mongodb.find(PATTERN, PATTERN_01, { "CP": newdataHEAD[`CP`] });
           console.log(newdataHEAD[`CP`]);
@@ -363,6 +366,8 @@ router.post('/CopyReport', async (req, res) => {
               "ReferFrom": input[`original`],
               "dateG": new Date(),
               "dateGSTR": day,
+
+              "Group": input[`Group`],
 
 
             };
