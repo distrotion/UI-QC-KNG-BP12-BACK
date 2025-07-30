@@ -295,8 +295,8 @@ router.post('/CopyReport', async (req, res) => {
   //-------------------------------------
 
   if (input[`original`] !== undefined && input[`new`] !== undefined&& input[`Group`] !== undefined) {
-    
-    find1 = await mongodb.update(MAIN_DATA, MAIN, { "PO": input[`original`]},{ "Group": input['Group']});
+
+    find1 = await mongodb.update(MAIN_DATA, MAIN, { "PO": input[`original`]},{ "Group": input['Group'] ,"ReferFrom": input[`original`]});
 
     let newdataHEAD = {};
 
